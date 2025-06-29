@@ -5,7 +5,7 @@ async function startBpmAnalysis() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const audioContext = new AudioContext();
     const source = audioContext.createMediaStreamSource(stream);
-    const lowpass = getBiquadFilter(audioContext); // ローパスフィルタでノイズ軽減
+    const lowpass = audioContext.createBiquadFilter(); // ローパスフィルタでノイズ軽減
     lowpass.type = 'lowpass';
     lowpass.frequency.setValueAtTime(200, audioContext.currentTime); // 低周波（キック）を強調
 
