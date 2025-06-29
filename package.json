@@ -1,0 +1,11 @@
+{
+  "name": "realtime-bpm-analyzer-web",
+  "version": "1.0.0",
+  "description": "リアルタイムBPM解析ツール（音ゲーボス曲向け）",
+  "dependencies": {
+    "realtime-bpm-analyzer": "^4.0.2"
+  },
+  "scripts": {
+    "start": "npx http-server -p 8080"
+  }
+}
