@@ -10,6 +10,8 @@
   <h1>リアルタイムBPM解析（音ゲーボス曲向け）</h1>
   <p>音ゲーのボス曲（170〜190 BPM）を優先検出。マイクを有効にしてください。</p>
   <button id="startBtn">マイク開始</button>
+  <button id="testAudioBtn">テスト音声でBPM解析</button>
+  <button id="retryBtn" style="display: none;">リトライ</button>
   <div id="bpmOutput">BPM: 待機中...</div>
   <div id="stableBpmOutput">安定BPM: 待機中...</div>
   <script src="https://unpkg.com/realtime-bpm-analyzer@4.0.2/dist/index.js"></script>
