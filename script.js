@@ -1,28 +1,29 @@
-// Web Audio APIとrealtime-bpm-analyzerを使用したBPM解析
 async function startBpmAnalysis() {
   try {
     // マイク入力の取得
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const audioContext = new AudioContext();
+    // AudioContextを明示的に再開
+    if (audioContext.state === 'suspended') {
+      await audioContext.resume();
+      console.log('AudioContextを再開しました');
+    }
     const source = audioContext.createMediaStreamSource(stream);
-    const lowpass = audioContext.createBiquadFilter(); // ローパスフィルタでノイズ軽減
+    const lowpass = audioContext.createBiquadFilter();
     lowpass.type = 'lowpass';
-    lowpass.frequency.setValueAtTime(200, audioContext.currentTime); // 低周波（キック）を強調
+    lowpass.frequency.setValueAtTime(200, audioContext.currentTime);
 
-    // realtime-bpm-analyzerの設定
     const realtimeAnalyzerNode = await createRealTimeBpmProcessor(audioContext, {
       continuousAnalysis: true,
-      stabilizationTime: 10000, // 10秒後にデータリセット
-      minBpm: 160, // 音ゲー向けに160〜200 BPMを優先
+      stabilizationTime: 10000,
+      minBpm: 160,
       maxBpm: 200,
-      threshold: 0.75 // キックドラムの強いビートを検出しやすく
+      threshold: 0.75
     });
 
-    // ノードを接続
     source.connect(lowpass).connect(realtimeAnalyzerNode);
     source.connect(audioContext.destination);
 
-    // BPM出力処理
     const bpmOutput = document.getElementById('bpmOutput');
     const stableBpmOutput = document.getElementById('stableBpmOutput');
     realtimeAnalyzerNode.port.onmessage = (event) => {
@@ -36,8 +37,8 @@ async function startBpmAnalysis() {
       }
     };
   } catch (err) {
-    console.error('エラー:', err);
-    alert('マイクアクセスに失敗しました。ブラウザの許可を確認してください。');
+    console.error('マイクアクセスエラー:', err.name, err.message);
+    alert(`マイクアクセスに失敗しました。エラー: ${err.name} - ${err.message}\nSafariのマイク許可、HTTPS環境、またはマイクの状態を確認してください。`);
   }
 }
 
