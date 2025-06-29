@@ -46,7 +46,7 @@ async function startBpmAnalysis() {
       stack: err.stack
     });
     document.getElementById('retryBtn').style.display = 'block';
-    alert(`マイクアクセスに失敗しました。\nエラー: ${err.name} - ${err.message}\n1. Safari/Chromeのマイク許可を再確認\n2. 他のアプリでマイクが占有されていないか確認\n3. HTTPS環境（またはlocalhost）でテスト\n4. コンソールログを確認してください`);
+    alert(`マイクアクセスに失敗しました。\nエラー: ${err.name} - ${err.message}\n1. Safari/Chromeのマイク許可を再確認\n2. 他のアプリでマイクが占有されていないか確認\n3. HTTPS環境でテスト\n4. コンソールログを確認してください`);
   }
 }
 
@@ -60,7 +60,6 @@ document.getElementById('retryBtn').addEventListener('click', () => {
   startBpmAnalysis();
 });
 
-// テスト音声ボタン
 document.getElementById('testAudioBtn').addEventListener('click', async () => {
   try {
     console.log('テスト音声の再生を開始');
@@ -69,7 +68,7 @@ document.getElementById('testAudioBtn').addEventListener('click', async () => {
       await audioContext.resume();
       console.log('AudioContextを再開しました');
     }
-    const audioElement = new Audio('https://example.com/test-bpm180.mp3'); // BPM180の音ゲー曲に変更
+    const audioElement = new Audio('https://your-cloud-storage/test-bpm180.mp3'); // BPM180の音ゲー曲に変更
     const source = audioContext.createMediaElementSource(audioElement);
     const lowpass = audioContext.createBiquadFilter();
     lowpass.type = 'lowpass';
