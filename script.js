@@ -1,9 +1,9 @@
 async function startBpmAnalysis() {
   try {
-    // マイク入力の取得
+    console.log('マイクアクセスをリクエスト中...');
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    console.log('マイクアクセス成功:', stream);
     const audioContext = new AudioContext();
-    // AudioContextを明示的に再開
     if (audioContext.state === 'suspended') {
       await audioContext.resume();
       console.log('AudioContextを再開しました');
@@ -37,12 +37,17 @@ async function startBpmAnalysis() {
       }
     };
   } catch (err) {
-    console.error('マイクアクセスエラー:', err.name, err.message);
-    alert(`マイクアクセスに失敗しました。エラー: ${err.name} - ${err.message}\nSafariのマイク許可、HTTPS環境、またはマイクの状態を確認してください。`);
+    console.error('マイクアクセスエラー:', {
+      name: err.name,
+      message: err.message,
+      stack: err.stack
+    });
+    alert(`マイクアクセスに失敗しました。\nエラー: ${err.name} - ${err.message}\n1. Safari/Chromeのマイク許可を確認\n2. 他のアプリでマイクが占有されていないか確認\n3. HTTPS環境（またはlocalhost）でテスト\n4. コンソールログを確認してください`);
   }
 }
 
 // ボタンクリックで解析開始
 document.getElementById('startBtn').addEventListener('click', () => {
+  console.log('スタートボタンクリック');
   startBpmAnalysis();
 });
